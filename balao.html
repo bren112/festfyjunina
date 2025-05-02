@@ -40,12 +40,11 @@
     }
 
     .content {
-      position: relative;
-      z-index: 2;
-      height: 100vh;
-      overflow-y: scroll;
-      padding: 20px;
-      box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5pc;
     }
 
     .character-container {
@@ -130,24 +129,11 @@
   </div>
 
   <div class="content">
-    <h1>Bem-vindo ao Evento</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel lorem eget nulla tincidunt bibendum.
-      Fusce ac justo vitae nunc pretium dignissim. Nullam facilisis dolor a quam blandit, at facilisis justo
-      fermentum. Morbi pulvinar iaculis justo. Nullam nec turpis eu ipsum feugiat porttitor. Nullam et erat vitae
-      urna finibus tincidunt. Vivamus viverra ipsum in urna gravida, a laoreet nulla tristique.
-    </p>
-    <p>
-      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed nec
-      posuere nisi. Suspendisse potenti. Nullam efficitur, velit a interdum sagittis, nulla est viverra sem, vel
-      posuere eros leo at purus. Quisque sed erat eget velit porttitor dapibus. Mauris ut turpis in neque posuere
-      viverra.
-    </p>
-    <p>
-      Curabitur in metus eget mauris sodales posuere. Integer nec nunc bibendum, efficitur est et, vehicula quam.
-      In eu nisi a justo gravida accumsan. Proin pretium suscipit nisl, a tempus nulla ultricies nec. In eget
-      dapibus leo. Sed eget ipsum sed elit laoreet maximus.
-    </p>
+    <h1>Pague Nesse PIX</h1>
+    <img src="pix.png" alt="" srcset="" style="width: 20pc;">
+    <br>
+    <br>
+    <input type="text" disabled placeholder="32879837892">
   </div>
 
   <div class="character-container" id="character">
@@ -155,15 +141,15 @@
     <div class="speech-bubble">
       <div id="typed-text" class="typewriter"></div>
       <div class="button-container" id="buttons">
-        <button onclick="responderSim()">Sim</button>
-        <button onclick="responderNao()">Não</button>
+        <button onclick="responderSim()">Saber</button>
+        <button onclick="responderNao()">Pagar</button>
       </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
-    const fullText = "Você quer saber tudo sobre esse evento? Temos várias atrações, horários especiais e surpresas exclusivas para quem participar!";
+    const fullText = "Você quer saber tudo sobre esse evento? ou já quer pagar?...";
     const textElement = document.getElementById('typed-text');
     const buttonContainer = document.getElementById('buttons');
     let index = 0;
@@ -196,26 +182,6 @@
       }, 500);
     }
 
-    function animateShapes() {
-      const bg = document.getElementById('bg-animation');
-      for (let i = 0; i < 20; i++) {
-        const shape = document.createElement('div');
-        shape.classList.add('shape');
-        shape.style.top = Math.random() * 100 + '%';
-        shape.style.left = Math.random() * 100 + '%';
-        shape.style.width = shape.style.height = (30 + Math.random() * 60) + 'px';
-        bg.appendChild(shape);
-
-        gsap.to(shape, {
-          y: -window.innerHeight,
-          x: "+=" + (Math.random() * 200 - 100),
-          duration: 5 + Math.random() * 5,
-          ease: "power1.inOut",
-          repeat: -1,
-          yoyo: true
-        });
-      }
-    }
   </script>
 
 </body>
