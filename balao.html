@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Balão Falando</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .character-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      align-items: flex-end;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+
+    .character-image {
+      width: 120px;
+      height: auto;
+    }
+
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      color: #000;
+      border-radius: 20px;
+      padding: 20px;
+      margin-left: 30px;
+      margin-bottom: 80px;
+      max-width: 400px;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 5;
+      display: inline-block;
+      word-wrap: break-word;
+    }
+
+    .speech-bubble::before {
+      content: "";
+      position: absolute;
+      left: -30px;
+      bottom: -20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: transparent;
+      border: 3px solid #fff;
+      border-right-color: transparent;
+      border-top-color: transparent;
+      transform: rotate(-45deg);
+    }
+
+    .typewriter {
+      display: inline-block;
+      white-space: normal;
+      overflow: hidden;
+      min-height: 50px;
+    }
+
+    .button-container {
+      margin-top: 15px;
+      display: none;
+      justify-content: space-around;
+    }
+
+    .speech-bubble button {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 6px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: background 0.3s ease;
+    }
+
+    .speech-bubble button:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="character-container" id="character">
+    <img src="per.png" alt="Personagem" class="character-image">
+    <div class="speech-bubble">
+      <div id="typed-text" class="typewriter"></div>
+      <div class="button-container" id="buttons">
+        <button onclick="responderSim()">Sim</button>
+        <button onclick="responderNao()">Não</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fullText = "Você quer saber tudo sobre esse evento? Temos várias atrações, horários especiais e surpresas exclusivas para quem participar!";
+    const textElement = document.getElementById('typed-text');
+    const buttonContainer = document.getElementById('buttons');
+
+    let index = 0;
+
+    function typeWriter() {
+      if (index < fullText.length) {
+        textElement.innerHTML += fullText.charAt(index);
+        index++;
+        setTimeout(typeWriter, 40); // velocidade da digitação
+      } else {
+        buttonContainer.style.display = 'flex';
+      }
+    }
+
+    window.onload = typeWriter;
+
+    function responderSim() {
+      alert("Você escolheu SIM!");
+    }
+
+    function responderNao() {
+      const personagem = document.getElementById('character');
+      personagem.style.opacity = '0';
+      setTimeout(() => {
+        personagem.style.display = 'none';
+      }, 500);
+    }
+  </script>
+
+</body>
+</html>
