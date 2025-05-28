@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obter IP Local</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f0f2f5;
+    }
+    .ip-container {
+      display: inline-block;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .ip-address {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ip-container">
+    <h1>Seu IP Local é:</h1>
+    <p class="ip-address" id="local-ip">Carregando...</p>
+  </div>
+
+  <script>
+    function getLocalIP(callback) {
+      var peerConnection = new RTCPeerConnection({iceServers: []});
+      peerConnection.createDataChannel("");
+      peerConnection.createOffer().then(function(offer) {
+        return peerConnection.setLocalDescription(offer);
+      }).then(function() {
+        peerConnection.onicecandidate = function(event) {
+          if (event.candidate) {
+            var ip = /([0-9]{1,3}\.){3}[0-9]{1,3}/.exec(event.candidate.candidate);
+            if (ip) {
+              callback(ip[0]);
+            }
+          }
+        };
+      });
+    }
+
+    getLocalIP(function(ip) {
+      if (ip) {
+        document.getElementById('local-ip').textContent = "Seu IP local: " + ip;
+      } else {
+        document.getElementById('local-ip').textContent = "Não foi possível obter o IP local.";
+      }
+    });
+  </script>
+
+</body>
+</html>
