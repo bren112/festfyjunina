@@ -80,24 +80,22 @@
 
   <!-- <h1>Sobre o Nosso Evento!</h1> -->
   <div class="galeria">
-    <div class="imagem">
-     
+    <div class="imagem" data-href="https://example.com/djs">
       <img src="djs.png" alt="">
     </div>
-    <div class="imagem">
-   
+    <div class="imagem" data-href="https://example.com/regras">
       <img src="regras.png" alt="">
     </div>
-    <div class="imagem">
-     
+    <div class="imagem" data-href="https://example.com/bebidas">
       <img src="BEBIDAS.png" alt="">
     </div>
-    <div class="imagem">
-      
+    <div class="imagem" data-href="https://example.com/local">
       <img src="local.png" alt="">
     </div>
-
   </div>
+  
+  <canvas id="explosionCanvas"></canvas>
+  
 
   <script>
     // Executar animação apenas em telas menores que 768px (mobile)
@@ -122,6 +120,76 @@
       });
     }
   </script>
+<script>
+  const canvas = document.getElementById('explosionCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.style.position = 'fixed';
+  canvas.style.top = 0;
+  canvas.style.left = 0;
+  canvas.style.pointerEvents = 'none';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  function createParticles(x, y, img, callback) {
+    const particles = [];
+    const image = new Image();
+    image.src = img;
+
+    image.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const size = 5;
+      for (let i = 0; i < 200; i++) {
+        particles.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 10,
+          vy: (Math.random() - 0.5) * 10,
+          alpha: 1,
+          size,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.02;
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        if (particles[0].alpha > 0) {
+          requestAnimationFrame(animate);
+        } else {
+          callback();
+        }
+      }
+
+      animate();
+    };
+  }
+
+  document.querySelectorAll('.imagem img').forEach(img => {
+    img.addEventListener('click', (e) => {
+      e.preventDefault();
+      const parent = img.parentElement;
+      const href = parent.getAttribute('data-href');
+      const rect = img.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      img.style.opacity = 0;
+
+      createParticles(centerX, centerY, img.src, () => {
+        window.location.href = href;
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
