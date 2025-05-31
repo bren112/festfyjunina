@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Galeria com Letreiro</title>
   <style>
     body {
@@ -10,6 +10,13 @@
       background: #111;
       font-family: sans-serif;
       color: white;
+      padding: 20px;
+      box-sizing: border-box;
+      min-height: 100vh;
+      /* Centralizar conteúdo verticalmente e horizontalmente */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     h1 {
@@ -20,11 +27,10 @@
 
     .galeria {
       display: flex;
-      flex-direction: column;
+      flex-direction: column; /* coluna no celular */
       gap: 60px;
-      padding: 0 20px 60px;
       max-width: 800px;
-      margin: 0 auto;
+      width: 100%;
     }
 
     .imagem {
@@ -32,6 +38,9 @@
       opacity: 0;
       transform: translateY(50px);
       transition: opacity 1s ease-out, transform 1s ease-out;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .imagem img {
@@ -59,46 +68,49 @@
       border-top-right-radius: 12px;
     }
 
-    /* --- DESKTOP: mostrar tudo lado a lado sem animação --- */
+    /* --- DESKTOP: todos em uma fileira só e centralizados --- */
     @media (min-width: 768px) {
       .galeria {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        flex-direction: row; /* muda para linha */
+        flex-wrap: nowrap;
         gap: 20px;
-        max-width: 1000px;
+        max-width: none;
+        width: auto;
+        justify-content: center;
+        align-items: center;
       }
 
       .imagem {
         opacity: 1 !important;
         transform: none !important;
-        transition: none !important
+        transition: none !important;
+        flex: 0 0 200px; /* largura fixa para cada card */
+        max-width: none;
+        margin: 0;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- <h1>Sobre o Nosso Evento!</h1> -->
   <div class="galeria">
-    <div class="imagem" data-href="https://example.com/djs">
-      <img src="djs.png" alt="">
+    <div class="imagem" data-href="/dj.html">
+      <img src="djs.png" alt="" />
     </div>
-    <div class="imagem" data-href="https://example.com/regras">
-      <img src="regras.png" alt="">
+    <div class="imagem" data-href="/regras.html">
+      <img src="regras.png" alt="" />
     </div>
-    <div class="imagem" data-href="https://example.com/bebidas">
-      <img src="BEBIDAS.png" alt="">
+    <div class="imagem" data-href="/bebidas.html">
+      <img src="BEBIDAS.png" alt="" />
     </div>
-    <div class="imagem" data-href="https://example.com/local">
-      <img src="local.png" alt="">
+    <div class="imagem" data-href="/local.html">
+      <img src="local.png" alt="" />
     </div>
   </div>
   
   <canvas id="explosionCanvas"></canvas>
-  
 
   <script>
-    // Executar animação apenas em telas menores que 768px (mobile)
     if (window.innerWidth < 768) {
       const imagens = document.querySelectorAll('.imagem');
 
@@ -114,82 +126,81 @@
 
       imagens.forEach(imagem => observer.observe(imagem));
     } else {
-      // Forçar mostrar todas no desktop
       document.querySelectorAll('.imagem').forEach(imagem => {
         imagem.classList.add('mostrar');
       });
     }
   </script>
-<script>
-  const canvas = document.getElementById('explosionCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.style.position = 'fixed';
-  canvas.style.top = 0;
-  canvas.style.left = 0;
-  canvas.style.pointerEvents = 'none';
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  <script>
+    const canvas = document.getElementById('explosionCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.style.position = 'fixed';
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    canvas.style.pointerEvents = 'none';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  function createParticles(x, y, img, callback) {
-    const particles = [];
-    const image = new Image();
-    image.src = img;
+    function createParticles(x, y, img, callback) {
+      const particles = [];
+      const image = new Image();
+      image.src = img;
 
-    image.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const size = 5;
-      for (let i = 0; i < 200; i++) {
-        particles.push({
-          x, y,
-          vx: (Math.random() - 0.5) * 10,
-          vy: (Math.random() - 0.5) * 10,
-          alpha: 1,
-          size,
-          color: `hsl(${Math.random() * 360}, 100%, 70%)`
-        });
-      }
-
-      function animate() {
+      image.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.alpha -= 0.02;
-          ctx.globalAlpha = p.alpha;
-          ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        ctx.globalAlpha = 1;
-        if (particles[0].alpha > 0) {
-          requestAnimationFrame(animate);
-        } else {
-          callback();
+        const size = 5;
+        for (let i = 0; i < 200; i++) {
+          particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 10,
+            vy: (Math.random() - 0.5) * 10,
+            alpha: 1,
+            size,
+            color: `hsl(${Math.random() * 360}, 100%, 70%)`
+          });
         }
-      }
 
-      animate();
-    };
-  }
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.02;
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+          if (particles[0].alpha > 0) {
+            requestAnimationFrame(animate);
+          } else {
+            callback();
+          }
+        }
 
-  document.querySelectorAll('.imagem img').forEach(img => {
-    img.addEventListener('click', (e) => {
-      e.preventDefault();
-      const parent = img.parentElement;
-      const href = parent.getAttribute('data-href');
-      const rect = img.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+        animate();
+      };
+    }
 
-      img.style.opacity = 0;
+    document.querySelectorAll('.imagem img').forEach(img => {
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parent = img.parentElement;
+        const href = parent.getAttribute('data-href');
+        const rect = img.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
 
-      createParticles(centerX, centerY, img.src, () => {
-        window.location.href = href;
+        img.style.opacity = 0;
+
+        createParticles(centerX, centerY, img.src, () => {
+          window.location.href = href;
+        });
       });
     });
-  });
-</script>
+  </script>
 
 </body>
 </html>
