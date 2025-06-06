@@ -67,17 +67,23 @@
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
     }
-
+    .aviso{
+      display: none;
+    }
     /* --- DESKTOP: todos em uma fileira só e centralizados --- */
     @media (min-width: 768px) {
       .galeria {
-        flex-direction: row; /* muda para linha */
+        display: none;
+        flex-direction: column; /* muda para linha */
         flex-wrap: nowrap;
         gap: 20px;
         max-width: none;
         width: auto;
         justify-content: center;
         align-items: center;
+      }
+      .aviso{
+        display: block;
       }
 
       .imagem {
@@ -92,13 +98,16 @@
   </style>
 </head>
 <body>
-
+  <div class="aviso">
+<h1>Área somente para celular!</h1>
+<p style="text-align: center;position:relative;top:-3pc">abra no seu 👊😎</p>
+</div>
   <div class="galeria">
     <div class="imagem" data-href="/dj.html">
       <img src="./imgsn/imgdj.png" alt="" />
     </div>
     <div class="imagem" data-href="/regras.html">
-      <img src="regras.png" alt="" />
+      <img src="./imgsn/regra.png" alt="" />
     </div>
     <div class="imagem" data-href="/bebidas.html">
       <img src="./imgsn/pessoacomlata.png" alt="" />
